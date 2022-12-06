@@ -1,0 +1,39 @@
+This Dockerfile uses the ubuntu:20.04 base image, installs the openssh-server package, sets up SSH logging, enables root login, and sets up a logging script that logs login information, commands, and files that are downloaded.
+You can build the Docker image using the docker build command:
+$ docker build -t ssh-server-logger .
+Once the image is built, you can run it using the docker run command:
+$ docker run -d -p 2222:22 ssh-server-logger
+This will run the Docker image in detached mode, mapping port 2222 on the host to port 22 in the container. You can then connect to the SSH server using a SSH client, such as ssh:
+$ ssh root@localhost -p 2222
+You can view the log files using the docker exec command:
+$ docker exec -it <container-id> cat /var/log/ssh/ssh_login.log
+$ docker exec -it <container-id> cat /var/log/ssh/ssh_commands.log
+$ docker exec -it <container-id> cat /var/log/ssh/ssh_file_downloads.log
+Replace <container-id> with the ID of the running Docker container.
+I hope this helps! Let me know if you have any other questions.
+
+
+{ME}
+Can you give me an example of what each of those logs would look like?
+
+
+
+Sure, here are some examples of what the log files might look like:
+ssh_login.log:
+[2022-12-06 14:32:25] root logged in from 10.0.2.2
+[2022-12-06 14:35:34] user1 logged in from 10.0.2.3
+[2022-12-06 14:40:01] user2 logged in from 10.0.2.4
+
+ssh_commands.log:
+[2022-12-06 14:33:01] root ran the "ls" command
+[2022-12-06 14:33:10] root ran the "pwd" command
+[2022-12-06 14:33:15] root ran the "whoami" command
+[2022-12-06 14:34:01] user1 ran the "df" command
+[2022-12-06 14:34:05] user1 ran the "uname -a" command
+
+ssh_file_downloads.log:
+[2022-12-06 14:36:12] user1 tried to download file "file.txt"
+[2022-12-06 14:36:17] user1 successfully downloaded file "file.txt"
+[2022-12-06 14:37:01] user2 tried to download file "another_file.txt"
+[2022-12-06 14:37:05] user2 failed to download file "another_file.txt" (permission denied)
+These are just examples, and the actual log files will depend on the specific actions taken by users when connected to the SSH server. I hope this helps! Let me know if you have any other questions.
